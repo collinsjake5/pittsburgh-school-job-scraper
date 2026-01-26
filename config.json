@@ -1,0 +1,121 @@
+{
+  "paeducator_url": "https://www.paeducator.net/search",
+  "schools": [
+    {
+      "name": "Upper St. Clair",
+      "url": "https://uscsd.schoolspring.com",
+      "type": "SchoolSpring"
+    },
+    {
+      "name": "Mt. Lebanon",
+      "url": "https://www.applitrack.com/mtlsd/onlineapp/",
+      "type": "AppliTrack"
+    },
+    {
+      "name": "Peters Township",
+      "url": "https://www.paeducator.net/search",
+      "type": "PAEducator",
+      "paeducator_filter": "Peters Township"
+    },
+    {
+      "name": "South Fayette",
+      "url": "https://southfayettepe.schoolspring.com/",
+      "type": "SchoolSpring"
+    },
+    {
+      "name": "Chartiers Valley",
+      "url": "https://www.paeducator.net/search",
+      "type": "PAEducator",
+      "paeducator_filter": "Chartiers Valley"
+    },
+    {
+      "name": "Bethel Park",
+      "url": "https://www.applitrack.com/bpsd/onlineapp/",
+      "type": "AppliTrack"
+    },
+    {
+      "name": "West Allegheny",
+      "url": "https://www.paeducator.net/search",
+      "type": "PAEducator",
+      "paeducator_filter": "West Allegheny"
+    },
+    {
+      "name": "Moon Area",
+      "url": "https://www.applitrack.com/moonarea/onlineapp/",
+      "type": "AppliTrack"
+    },
+    {
+      "name": "Montour",
+      "url": "https://www.montourschools.com/apps/pages/index.jsp?uREC_ID=349060&type=d&pREC_ID=758233",
+      "type": "Other"
+    },
+    {
+      "name": "Canon-McMillan",
+      "urls": [
+        {
+          "url": "https://www.applitrack.com/CanonMcMillanSD/onlineapp/",
+          "type": "AppliTrack"
+        },
+        {
+          "url": "https://canonmcmillan.tedk12.com/hire/index.aspx",
+          "type": "PowerSchool"
+        }
+      ],
+      "type": "Multiple"
+    },
+    {
+      "name": "Keystone Oaks",
+      "url": "https://www.paeducator.net/search",
+      "type": "PAEducator",
+      "paeducator_filter": "Keystone Oaks"
+    },
+    {
+      "name": "South Park",
+      "url": "https://sparksd.schoolspring.com",
+      "type": "SchoolSpring"
+    },
+    {
+      "name": "Baldwin-Whitehall",
+      "url": "https://www.paeducator.net/search",
+      "type": "PAEducator",
+      "paeducator_filter": "Baldwin-Whitehall"
+    },
+    {
+      "name": "Brentwood",
+      "url": "https://www.applitrack.com/Brentwood/onlineapp/",
+      "type": "AppliTrack"
+    },
+    {
+      "name": "Fort Cherry",
+      "url": "https://www.fortcherry.org/EmploymentOpportunities.aspx",
+      "type": "Other"
+    },
+    {
+      "name": "Carlynton",
+      "url": "https://www.paeducator.net/search",
+      "type": "PAEducator",
+      "paeducator_filter": "Carlynton"
+    },
+    {
+      "name": "Chartiers-Houston",
+      "url": "https://www.chbucs.k12.pa.us",
+      "type": "Other",
+      "note": "Small district - check main site for employment info"
+    },
+    {
+      "name": "Trinity Area",
+      "url": "https://www.trinitypride.org/employment-opportunities",
+      "type": "Other"
+    },
+    {
+      "name": "North Allegheny",
+      "url": "https://www.applitrack.com/northallegheny/onlineapp/",
+      "type": "AppliTrack"
+    },
+    {
+      "name": "North Hills",
+      "url": "https://www.applitrack.com/nhsd/onlineapp/",
+      "type": "AppliTrack"
+    }
+  ]
+}

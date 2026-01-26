@@ -1,0 +1,19 @@
+# Credentials - never commit!
+settings.json
+
+# Cache files
+.job_cache.json
+
+# Logs
+*.log
+cron.log
+
+# Results
+jobs_*.json
+latest_results.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
