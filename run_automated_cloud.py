@@ -17,7 +17,7 @@ script_dir = Path(__file__).parent
 sys.path.insert(0, str(script_dir))
 
 from scraper import load_config, scrape_all_districts, filter_jobs
-from notify import send_notifications
+from notify import send_status_email
 
 
 def get_env_config() -> dict:
@@ -208,28 +208,25 @@ def run_scraper():
         current_job_keys = {f"{job['district']}|{job['title']}" for job in filtered_jobs}
         db.mark_missing_jobs_inactive(current_job_keys)
 
-        # Send notifications for new jobs
-        notification_results = {'email': False, 'push': False}
+        # Send status email (always, so user knows the scraper ran)
         if new_jobs:
             print(f"\nFound {len(new_jobs)} NEW position(s)!")
             for job in new_jobs:
                 print(f"  - {job['title']} ({job['district']})")
 
-            print("\nSending notifications...")
-            notification_results = send_notifications(new_jobs, config)
+        print("\nSending status email...")
+        email_sent = send_status_email(len(filtered_jobs), len(new_jobs), new_jobs, config)
 
-            if notification_results['email']:
-                print("Email sent")
-                db.log_notification(run_id, 'email', len(new_jobs), True)
-            if notification_results['push']:
-                print("Push notification sent")
-                db.log_notification(run_id, 'push', len(new_jobs), True)
+        if email_sent:
+            print("Status email sent")
+            db.log_notification(run_id, 'email', len(new_jobs), True)
 
             # Mark new jobs as notified
-            new_job_ids = [job['id'] for job in new_jobs if 'id' in job]
-            db.mark_jobs_notified(new_job_ids)
+            if new_jobs:
+                new_job_ids = [job['id'] for job in new_jobs if 'id' in job]
+                db.mark_jobs_notified(new_job_ids)
         else:
-            print("\nNo new positions. No notifications sent.")
+            print("Failed to send status email")
 
         # Update scrape run as successful
         db.update_scrape_run(run_id, 'success', len(filtered_jobs), len(new_jobs))

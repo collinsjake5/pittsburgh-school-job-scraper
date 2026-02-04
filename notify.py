@@ -148,3 +148,89 @@ def send_test_notifications(config: dict) -> dict:
 
     print("Sending test notifications...")
     return send_notifications(test_jobs, config)
+
+
+def send_status_email(total_jobs: int, new_jobs: int, jobs: list[dict], config: dict) -> bool:
+    """Send a status email summarizing the scrape run."""
+    sender_email = config.get('email_from')
+    receiver_email = config.get('email_to')
+    password = config.get('email_password')
+
+    if not all([sender_email, receiver_email, password]):
+        print("Email configuration incomplete")
+        return False
+
+    # Create message
+    msg = MIMEMultipart('alternative')
+
+    if new_jobs > 0:
+        msg['Subject'] = f"🎓 {new_jobs} NEW Social Studies Position(s) Found!"
+    elif total_jobs > 0:
+        msg['Subject'] = f"✓ Scraper ran - {total_jobs} position(s) still open"
+    else:
+        msg['Subject'] = "✓ Scraper ran - No social studies positions found"
+
+    msg['From'] = sender_email
+    msg['To'] = receiver_email
+
+    # Build content
+    if new_jobs > 0:
+        text_content = f"Found {new_jobs} NEW social studies teaching position(s)!\n\n"
+        html_content = f"""
+        <html>
+        <body>
+            <h2>🎓 {new_jobs} NEW Social Studies Position(s) Found!</h2>
+            <p>The following NEW positions match your criteria:</p>
+            <ul>
+        """
+        for job in jobs:
+            text_content += f"• {job['title']}\n"
+            text_content += f"  District: {job['district']}\n"
+            text_content += f"  URL: {job['url']}\n\n"
+            html_content += f"""
+                <li>
+                    <strong>{job['title']}</strong><br>
+                    District: {job['district']}<br>
+                    <a href="{job['url']}">View Posting</a>
+                </li>
+                <br>
+            """
+        html_content += "</ul>"
+    elif total_jobs > 0:
+        text_content = f"Daily scrape completed. {total_jobs} social studies position(s) still open (no new ones today).\n"
+        html_content = f"""
+        <html>
+        <body>
+            <h2>✓ Daily Scrape Complete</h2>
+            <p><strong>{total_jobs}</strong> social studies position(s) still open (no new ones today).</p>
+        """
+    else:
+        text_content = "Daily scrape completed. No social studies positions currently open.\n"
+        html_content = """
+        <html>
+        <body>
+            <h2>✓ Daily Scrape Complete</h2>
+            <p>No social studies positions currently open in any of the monitored districts.</p>
+            <p>You'll be notified when new positions are posted.</p>
+        """
+
+    text_content += "\n--\nPittsburgh School Job Scraper"
+    html_content += """
+            <hr>
+            <p><em>Pittsburgh School Job Scraper</em></p>
+        </body>
+        </html>
+    """
+
+    msg.attach(MIMEText(text_content, 'plain'))
+    msg.attach(MIMEText(html_content, 'html'))
+
+    try:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+            server.login(sender_email, password)
+            server.sendmail(sender_email, receiver_email, msg.as_string())
+        print(f"Status email sent to {receiver_email}")
+        return True
+    except Exception as e:
+        print(f"Failed to send status email: {e}")
+        return False
