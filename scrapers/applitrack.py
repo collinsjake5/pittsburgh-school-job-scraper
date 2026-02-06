@@ -16,6 +16,10 @@ SOCIAL_STUDIES_SEARCH_TERMS = [
     'civics',
     'government',
     'economics',
+    'geography',
+    'humanities',
+    'sociology',
+    'psychology',
 ]
 
 
