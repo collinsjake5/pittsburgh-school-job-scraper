@@ -33,6 +33,11 @@ SOCIAL_STUDIES_KEYWORDS = [
     'ap history',
     'ap government',
     'ap economics',
+    # Additional terms
+    'humanities',
+    'sociology',
+    'psychology',
+    'current events',
 ]
 
 # Keywords for middle/high school (grades 6-12)
@@ -63,11 +68,28 @@ EXCLUDE_KEYWORDS = [
 
 
 def is_social_studies_job(job: dict) -> bool:
-    """Check if a job is related to social studies - must be in the title."""
-    title = job.get('title', '').lower()
+    """Check if a job is related to social studies.
 
-    # The title must contain a social studies keyword
-    return any(kw in title for kw in SOCIAL_STUDIES_KEYWORDS)
+    Checks title, position_type, location, category, and search_term fields.
+    """
+    # Combine all available text fields for matching
+    title = job.get('title', '').lower()
+    position_type = job.get('position_type', '').lower()
+    location = job.get('location', '').lower()
+    category = job.get('category', '').lower()
+    search_term = job.get('search_term', '').lower()
+
+    combined_text = f"{title} {position_type} {location} {category}"
+
+    # Check if any social studies keyword appears in combined text
+    if any(kw in combined_text for kw in SOCIAL_STUDIES_KEYWORDS):
+        return True
+
+    # Also include if it was found via a social studies search term
+    if search_term and any(kw in search_term for kw in SOCIAL_STUDIES_KEYWORDS):
+        return True
+
+    return False
 
 
 def is_teaching_position(job: dict) -> bool:
