@@ -2,8 +2,8 @@ name: Daily Job Scraper
 
 on:
   schedule:
-    # Run at 9:00 AM Eastern Time (14:00 UTC in winter, 13:00 UTC in summer)
-    # Using 14:00 UTC to account for EST (UTC-5)
+    # Run daily at 9:00 AM Eastern Time
+    # 14:00 UTC = 9:00 AM EST (winter), 13:00 UTC = 9:00 AM EDT (summer)
     - cron: '0 14 * * *'
 
   # Allow manual trigger from GitHub Actions UI
