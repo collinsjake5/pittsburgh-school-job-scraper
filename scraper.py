@@ -70,45 +70,64 @@ EXCLUDE_KEYWORDS = [
 def is_social_studies_job(job: dict) -> bool:
     """Check if a job is related to social studies.
 
-    Checks title, position_type, location, category, and search_term fields.
+    Primary check is in job title. Also checks position_type and category
+    but NOT search_term (which would include all results from a search).
     """
-    # Combine all available text fields for matching
     title = job.get('title', '').lower()
     position_type = job.get('position_type', '').lower()
-    location = job.get('location', '').lower()
     category = job.get('category', '').lower()
-    search_term = job.get('search_term', '').lower()
 
-    combined_text = f"{title} {position_type} {location} {category}"
-
-    # Check if any social studies keyword appears in combined text
-    if any(kw in combined_text for kw in SOCIAL_STUDIES_KEYWORDS):
+    # Primary: title must contain a social studies keyword
+    if any(kw in title for kw in SOCIAL_STUDIES_KEYWORDS):
         return True
 
-    # Also include if it was found via a social studies search term
-    if search_term and any(kw in search_term for kw in SOCIAL_STUDIES_KEYWORDS):
+    # Secondary: check position_type (e.g., "Social Studies Teacher")
+    if any(kw in position_type for kw in SOCIAL_STUDIES_KEYWORDS):
+        return True
+
+    # Also check category field if present
+    if category and any(kw in category for kw in SOCIAL_STUDIES_KEYWORDS):
         return True
 
     return False
 
 
 def is_teaching_position(job: dict) -> bool:
-    """Check if a job is a teaching position (not aide/support staff)."""
+    """Check if a job is a full-time teaching position (not substitute/aide/coach)."""
     title = job.get('title', '').lower()
     position_type = job.get('position_type', '').lower()
 
-    # Exclude non-teaching positions
+    combined = title + ' ' + position_type
+
+    # Exclude substitute/temporary positions
+    substitute_keywords = [
+        'substitute', 'sub ', 'per diem', 'day-to-day', 'day to day',
+        'guest teacher', 'building substitute', 'long-term sub',
+        'long term sub', 'homebound', 'student teacher',
+        'retiree', 'psers'
+    ]
+    if any(kw in combined for kw in substitute_keywords):
+        return False
+
+    # Exclude coaching/athletic positions
+    coaching_keywords = [
+        'coach', 'athletic', 'head coach', 'assistant coach',
+        'event worker', 'jrotc', 'rotc'
+    ]
+    if any(kw in combined for kw in coaching_keywords):
+        return False
+
+    # Exclude non-teaching support positions
     exclude_types = [
         'aide', 'paraprofessional', 'assistant', 'pca',
         'custodian', 'maintenance', 'cafeteria', 'food service',
         'secretary', 'clerical', 'bus driver', 'transportation',
-        'nurse', 'support staff'
+        'nurse', 'support staff', 'mechanic', 'social worker',
+        'counselor', 'psychologist'  # these are different roles
     ]
-
-    combined = title + ' ' + position_type
     if any(ex in combined for ex in exclude_types):
         # But include if it's explicitly a teaching position
-        if 'teacher' in combined or 'instructor' in combined:
+        if 'teacher' in combined and 'substitute' not in combined:
             return True
         return False
 
