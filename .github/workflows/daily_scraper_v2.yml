@@ -1,5 +1,5 @@
 name: Daily Job Scraper
-
+# updated settings
 on:
   workflow_dispatch:
   schedule:
